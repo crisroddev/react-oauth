@@ -2,6 +2,12 @@ import React, { Component } from 'react';
 import './App.css';
 import firebase from 'firebase';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
+
+firebase.initializeApp({
+  apiKey: "AIzaSyBdGSMYoVtbN6NQSFbi7Ts_fakhIz4RUgI",
+  authDomain: "fir-oauth-90199.firebaseapp.com"
+})
+
 class App extends Component {
   state = {isSignedIn: false}
   uiConfig = {
@@ -20,20 +26,29 @@ class App extends Component {
   componentDidMount = () => {
     firebase  
       .auth()
-      .onAuthStateChange(user => {
-        this.setState({
-          isSignedIn: !!user
-        })
+      .onAuthStateChanged(user => {
+        this.setState({ isSignedIn: !!user})
       })
   }
 
   render() {
     return (
       <div className="App">
-        {this.state.isSignedIn ? 
-          <div>Signed In!</div>
-        :
-          <div>Not Signed In</div>
+        { this.state.isSignedIn ? (
+          <span>
+            <div>Signed In!</div>
+            <button onClick={() => firebase
+              .auth()
+              .signOut()}>
+              Sign Out!
+            </button>
+          </span>
+        ) : (
+          <StyledFirebaseAuth
+            uiConfig={this.uiConfig}
+            firebaseAuth={firebase.auth()}
+          />
+        )
         }
       </div>
     );
