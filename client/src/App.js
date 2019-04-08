@@ -17,6 +17,16 @@ class App extends Component {
     }
   }
 
+  componentDidMount = () => {
+    firebase  
+      .auth()
+      .onAuthStateChange(user => {
+        this.setState({
+          isSignedIn: !!user
+        })
+      })
+  }
+
   render() {
     return (
       <div className="App">
